@@ -1496,13 +1496,13 @@ endfunction()
 #=============================================================================#
 function(find_sources VAR_NAME LIB_PATH RECURSE)
     set(FILE_SEARCH_LIST
-        ${LIB_PATH}/*.cpp
-        ${LIB_PATH}/*.c
-        ${LIB_PATH}/*.cc
-        ${LIB_PATH}/*.cxx
-        ${LIB_PATH}/*.h
-        ${LIB_PATH}/*.hh
-        ${LIB_PATH}/*.hxx)
+            ${LIB_PATH}/*.cpp   ${LIB_PATH}/src/*.cpp
+            ${LIB_PATH}/*.c     ${LIB_PATH}/src/*.c
+            ${LIB_PATH}/*.cc    ${LIB_PATH}/src/*.cc
+            ${LIB_PATH}/*.cxx   ${LIB_PATH}/src/*.cxx
+            ${LIB_PATH}/*.h     ${LIB_PATH}/src/*.h
+            ${LIB_PATH}/*.hh    ${LIB_PATH}/src/*.hh
+            ${LIB_PATH}/*.hxx   ${LIB_PATH}/src/*.hxx)
 
     if(RECURSE)
         file(GLOB_RECURSE LIB_FILES ${FILE_SEARCH_LIST})
