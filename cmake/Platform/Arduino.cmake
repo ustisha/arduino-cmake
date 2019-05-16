@@ -476,6 +476,8 @@ function(GENERATE_ARDUINO_FIRMWARE INPUT_NAME)
     endif()
     required_variables(VARS INPUT_BOARD MSG "must define for target ${INPUT_NAME}")
 
+    setup_arduino_cpu(ARDUINO_CPUMENU ${INPUT_NAME})
+
     set(ALL_LIBS)
     set(ALL_SRCS ${INPUT_SRCS} ${INPUT_HDRS})
     set(LIB_DEP_INCLUDES)
@@ -859,6 +861,23 @@ function(get_arduino_flags COMPILE_FLAGS_VAR LINK_FLAGS_VAR BOARD_ID MANUAL)
     else()
         message(FATAL_ERROR "Invalid Arduino board ID (${BOARD_ID}), aborting.")
     endif()
+endfunction()
+
+#=============================================================================#
+# [PRIVATE/INTERNAL]
+#
+# setup_arduino_cpu(VAR_NAME INPUT_NAME)
+#
+#        VAR_NAME    - Variable name that will hold the cpu menu
+#        INPUT_NAME  - The name of the firmware target
+#=============================================================================#
+function(setup_arduino_cpu VAR_NAME INPUT_NAME)
+    set(BOARD_CPU "${INPUT_NAME}_BOARD_CPU")
+    if (${BOARD_CPU})
+        set(CPUMENU "${${BOARD_CPU}}")
+        message(STATUS "Selected CPU ${CPUMENU}")
+        set(${VAR_NAME} ".menu.cpu.${CPUMENU}" PARENT_SCOPE)
+    endif ()
 endfunction()
 
 #=============================================================================#
@@ -2325,16 +2344,3 @@ else()
    	   register_hardware_platform(${ARDUINO_SDK_PATH}/hardware/arduino/${_platform})
 	endif()
 endif()
-
-if(ARDUINO_SDK_VERSION VERSION_LESS 1.5)
-	set(ARDUINO_PLATFORM "AVR")
-else()
-	if(NOT ARDUINO_PLATFORM)
-	   register_hardware_platform(${ARDUINO_SDK_PATH}/hardware/arduino/avr)
-	   set(ARDUINO_PLATFORM "AVR")
-	else()
-	   string(TOLOWER ${ARDUINO_PLATFORM} _platform)
-   	   register_hardware_platform(${ARDUINO_SDK_PATH}/hardware/arduino/${_platform})
-	endif()
-endif()
-
